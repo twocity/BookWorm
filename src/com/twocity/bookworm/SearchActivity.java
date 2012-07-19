@@ -1,16 +1,10 @@
 package com.twocity.bookworm;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-
-
-import android.util.Log;
+import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
