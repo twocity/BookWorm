@@ -18,6 +18,10 @@ import java.io.IOException;
 public class UpdateIntentService extends IntentService{
     private static final String TAG = "UpdateIntentService";
     private static final String URL_NEWEST_BOOK = "http://book.douban.com/latest";
+    private static final String URL_TOP_BOOK_1 = "";
+    private static final String URL_TOP_BOOK_2 = "";
+    private int top_book_index = 0;
+
     public UpdateIntentService(){
         super(TAG);
     }
@@ -75,11 +79,24 @@ public class UpdateIntentService extends IntentService{
     }
     
     private void updateTopBook(){
-        DataBaseHandler dbHandler = new DataBaseHandler(this);
+        
         try {
-            Document doc = Jsoup.connect(URL_NEWEST_BOOK).get();
+            ParseTopBookHtml(URL_TOP_BOOK_1,URL_TOP_BOOK_2);
+            Intent intent = new Intent();
+            intent.setAction(PreferenceUtils.ACTION_UPDATE_TOP_BOOK_COMPLETE);
+            sendBroadcast(intent);
+            
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void ParseTopBookHtml(String... urls) throws IOException{
+        DataBaseHandler dbHandler = new DataBaseHandler(this);
+        for(String url:urls){
+            Document doc = Jsoup.connect(url).get();
             Element article = doc.select("ul.chart-dashed-list").first();
-            Elements booklist = article.select("li.clearfix");
+            Elements booklist = article.select("li");
             
             String author = "";
             String title = "";
@@ -87,13 +104,23 @@ public class UpdateIntentService extends IntentService{
             String imagelink = "";
             
             for(Element item:booklist){
-                Log.d(TAG,item.toString());
-//                Element linksinfo = item.select("p.");
-//                author = item.select("p.color-gray").text();
+                title = item.select("h2>a").text();
+                author = item.select("p.color-gray").text();
+                link = item.select("h2>a[href]").attr("href");
+                imagelink = item.select("img[src$=.jpg]").attr("src");
+                Books tmp = new Books(top_book_index,title,author,"",link,imagelink);
+                insert2DB(dbHandler,tmp);
+                top_book_index++;
+
             }
-            
-        } catch(IOException e){
-            e.printStackTrace();
         }
+    }
+    
+    private void insert2DB(DataBaseHandler handler,Books book){
+    	if(!book.isEmpty()){
+            Log.d(TAG,book.toString());
+    		handler.insertTopBook(book);
+    	}
+    	
     }
 }

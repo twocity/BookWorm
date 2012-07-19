@@ -45,6 +45,15 @@ public class Books{
         return this.book_image_link;
     }
     
+    public boolean isEmpty(){
+    	if(book_title.equals("") || book_author.equals("")
+    			|| book_link.equals("") || book_image_link.equals("")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
     public String toString(){
         return "id: " + this._id +
                 "\ntitle: " + this.book_title +

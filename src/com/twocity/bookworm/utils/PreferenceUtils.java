@@ -7,6 +7,8 @@ public final class PreferenceUtils{
         "bookworm.action.update.newest.book.complete";
     public static final String ACTION_UPDATE_TOP_BOOK = 
         "bookworm.action.update.top.book";
+    public static final String ACTION_UPDATE_TOP_BOOK_COMPLETE = 
+    	"bookworm.action.update.top.book.complete";
     
     public static final String BOOK_TYPE = "show_book_type";
 }
