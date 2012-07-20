@@ -21,7 +21,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -68,6 +67,7 @@ public class ImageDownloader {
         Bitmap bitmap = getBitmapFromCache(url);
 
         if (bitmap == null) {
+            //Log.d(LOG_TAG,"=== reloading book cover ===");
             forceDownload(url, imageView);
         } else {
             cancelPotentialDownload(url, imageView);
@@ -144,7 +144,7 @@ public class ImageDownloader {
         final int IO_BUFFER_SIZE = 4 * 1024;
 
         // AndroidHttpClient is not allowed to be used from the main thread
-        final HttpClient client = (mode == Mode.NO_ASYNC_TASK) ? new DefaultHttpClient() :
+        final HttpClient client = //(mode == Mode.NO_ASYNC_TASK) ? new DefaultHttpClient() :
             AndroidHttpClient.newInstance("Android");
         final HttpGet getRequest = new HttpGet(url);
 
@@ -252,7 +252,7 @@ public class ImageDownloader {
                 BitmapDownloaderTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
                 // Change bitmap only if this process is still associated with it
                 // Or if we don't use any bitmap to task association (NO_DOWNLOADED_DRAWABLE mode)
-                if ((this == bitmapDownloaderTask) || (mode != Mode.CORRECT)) {
+                if ((this == bitmapDownloaderTask)) {
                     imageView.setImageBitmap(bitmap);
                 }
             }

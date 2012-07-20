@@ -1,12 +1,9 @@
 package com.twocity.bookworm;
 
-import com.twocity.bookworm.utils.AsyncImageLoader;
-import com.twocity.bookworm.utils.AsyncImageLoader.ImageCallback;
 import com.twocity.bookworm.utils.ImageDownloader;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,18 +12,16 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
  public class BookCursorAdapter extends SimpleCursorAdapter {
-
+        //private final static String TAG = "BookCursorAdapter";
         private LayoutInflater mInflater;
         private ImageView bookImageView;
         private TextView titleTextView;
         private TextView authorTextView;
-        private AsyncImageLoader imageLoader;
         
         private final ImageDownloader imageDownloader = new ImageDownloader();
 
         public BookCursorAdapter (Context context, int layout, Cursor c, String[] from, int[] to) {
             super(context, layout, c, from, to);
-            imageLoader = new AsyncImageLoader();
         }
 
         @Override
@@ -49,15 +44,6 @@ import android.widget.TextView;
             String imagelink = cursor.getString(imageIndex);
             imageDownloader.download(imagelink, (ImageView) bookImageView);
 
-//            imageLoader.loadDrawable(imagelink, new ImageCallback() {
-//                public void imageLoaded(Bitmap imageBitmap,String imageUrl) {
-//                    if (imageBitmap != null) {
-//                        bookImageView.setImageBitmap(imageBitmap);
-//                    }
-//                }
-//            });
-            
-            
             titleTextView.setText(cursor.getString(titleIndex));
             authorTextView.setText(cursor.getString(authorIndex));
         }

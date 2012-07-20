@@ -30,10 +30,10 @@ public class UpdateIntentService extends IntentService{
     protected void onHandleIntent(Intent intent){
         Log.d(TAG,"=== receive intent: "+intent.getAction());
         if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK)){
-            Log.d(TAG,"=== start to update newest book info ===");
+            //Log.d(TAG,"=== start to update newest book info ===");
             updateNewestBook();
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK)){
-            Log.d(TAG,"=== start to update top20 book info ===");
+            //Log.d(TAG,"=== start to update top20 book info ===");
             updateTopBook();
         }
     }
@@ -66,7 +66,7 @@ public class UpdateIntentService extends IntentService{
                 }else{
                     
                     Books book = new Books(i,title,author,info,link,image);
-                    Log.d(TAG,book.toString());
+                    //Log.d(TAG,book.toString());
                     dbHandler.insertNewestBook(book);
                     i++;
                 }
@@ -120,7 +120,7 @@ public class UpdateIntentService extends IntentService{
     
     private void insert2DB(DataBaseHandler handler,Books book){
     	if(!book.isEmpty()){
-            Log.d(TAG,book.toString());
+            //Log.d(TAG,book.toString());
     		handler.insertTopBook(book);
     	}
     	

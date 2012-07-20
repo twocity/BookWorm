@@ -4,6 +4,8 @@ package com.twocity.bookworm;
 import com.twocity.bookworm.service.UpdateIntentService;
 import com.twocity.bookworm.utils.DataBaseHandler;
 import com.twocity.bookworm.utils.PreferenceUtils;
+import com.twocity.bookworm.widget.PullToRefreshListView;
+import com.twocity.bookworm.widget.PullToRefreshListView.OnRefreshListener;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,20 +17,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 
 
 
-public class NewBookActivity extends DashboardActivity 
+public class NewBookActivity extends DashboardActivity
         /*implements LoaderManager.LoaderCallbacks<Cursor>*/{
     
     private static final String TAG="BookWorm";
     
     private BookCursorAdapter mAdapter;
     private Cursor mBookCursor = null;
-    private ListView listview;
+    private PullToRefreshListView listview;
     private boolean isNewestBookType = true;
+    private Intent updateIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -36,18 +38,24 @@ public class NewBookActivity extends DashboardActivity
         setContentView(R.layout.activity_new_book);
         
         isNewestBookType = this.getIntent().getBooleanExtra(PreferenceUtils.BOOK_TYPE, true);
-        //new Thread(fetchCursorRunnable).start();
+        new Thread(fetchCursorRunnable).start();
         
-        Intent intent = new Intent(this,UpdateIntentService.class);
+        updateIntent = new Intent(this,UpdateIntentService.class);
         if(isNewestBookType){
-            intent.setAction(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK);
+            updateIntent.setAction(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK);
             
         }else{
-            intent.setAction(PreferenceUtils.ACTION_UPDATE_TOP_BOOK);
+            updateIntent.setAction(PreferenceUtils.ACTION_UPDATE_TOP_BOOK);
         }
-        this.startService(intent);
+        //this.startService(intent);
 
-        listview = (ListView)findViewById(R.id.newest_book_list);
+        listview = (PullToRefreshListView)findViewById(R.id.newest_book_list);
+        listview.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                NewBookActivity.this.startService(updateIntent);
+            }
+        });
         
     }
     
@@ -56,29 +64,27 @@ public class NewBookActivity extends DashboardActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK_COMPLETE)){
-                Log.d(TAG,"=== newest book broadcast recerved ===");
+                //Log.d(TAG,"=== newest book broadcast recerved ===");
                 new Thread(fetchCursorRunnable).start();
             }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK_COMPLETE)){
-            	Log.d(TAG,"=== ACTION_UPDATE_TOP_BOOK_COMPLETE received! ===");
+            	//Log.d(TAG,"=== ACTION_UPDATE_TOP_BOOK_COMPLETE received! ===");
             	new Thread(fetchCursorRunnable).start();
             }
         }
     };
     
-    final Runnable fetchCursorRunnable = new Runnable(){
+    private final Runnable fetchCursorRunnable = new Runnable(){
     	public void run(){
     		DataBaseHandler dbHandler = new DataBaseHandler(NewBookActivity.this);
-            if(mBookCursor != null){
-                mBookCursor.close();
-            }
-    		if(isNewestBookType){
+//            if(mBookCursor != null){
+//                mBookCursor.close();
+//            }
+            if(isNewestBookType){
                 mBookCursor = dbHandler.queryNewestBook();
-                mHandler.sendEmptyMessage(1);
-    		}else{
-    			mBookCursor = dbHandler.queryTopBook();
-    			mHandler.sendEmptyMessage(1);
-    		}
-    		
+            }else{
+                mBookCursor = dbHandler.queryTopBook();
+            }
+            mHandler.sendEmptyMessage(1);
     	}
     };
     
@@ -89,7 +95,7 @@ public class NewBookActivity extends DashboardActivity
             String[] from = {"title"};
             switch(msg.what){
                 case 1:
-                    Log.d(TAG,"update newest book list");
+                    Log.d(TAG,"=== update listview ===");
                     mAdapter = new BookCursorAdapter(NewBookActivity.this, 
                           R.layout.bookitem, mBookCursor,
                           from, toViews);

@@ -21,6 +21,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     private static final String LINK = "link";
     private static final String IMAGE_LINK = "image_link";
     
+    
     private static final String CREATE_NEWEST_BOOK_DB = 
          "CREATE TABLE " + NEWEST_BOOK_TABLENAME + "(" +
          _ID + " INTEGER PRIMARY KEY," +
@@ -57,6 +58,14 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         onCreate(db);  
     }                
     
+    public void openDB(){
+        
+    }
+    
+    public void closeDB(){
+        
+    }
+    
     public void insertNewestBook(Books book){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -67,7 +76,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         values.put(LINK, book.getBookLink());
         values.put(IMAGE_LINK, book.getBookImgaeLink());
         
-        Log.d(TAG,"insert book :"+book.getBookTitle());
+        Log.d(TAG,"insert book :"+book.getBookID()+book.getBookTitle());
 
         db.delete(NEWEST_BOOK_TABLENAME, _ID + " = ?", new String[]{ String.valueOf(book.getBookID()) });
         db.insert(NEWEST_BOOK_TABLENAME,null,values);
@@ -83,7 +92,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         values.put(LINK, book.getBookLink());
         values.put(IMAGE_LINK, book.getBookImgaeLink());
         
-        Log.d(TAG,"insert book :"+book.getBookTitle());
+        Log.d(TAG,"insert book :"+book.getBookID()+book.getBookTitle());
 
         db.delete(TOP_BOOK_TABLENAME, _ID + " = ?", new String[]{ String.valueOf(book.getBookID()) });
         db.insert(TOP_BOOK_TABLENAME,null,values);
@@ -96,6 +105,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor c = db.query(NEWEST_BOOK_TABLENAME,null,null , null, null, null, null);
             c.moveToFirst();
+            db.close();
             return c;
         }catch(Exception e){
             e.printStackTrace();
@@ -110,6 +120,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor c = db.query(TOP_BOOK_TABLENAME,null,null , null, null, null, null);
             c.moveToFirst();
+            db.close();
             return c;
         }catch(Exception e){
             e.printStackTrace();
