@@ -36,7 +36,7 @@ public class NewBookActivity extends DashboardActivity
         setContentView(R.layout.activity_new_book);
         
         isNewestBookType = this.getIntent().getBooleanExtra(PreferenceUtils.BOOK_TYPE, true);
-        new Thread(fetchCursorRunnable).start();
+        //new Thread(fetchCursorRunnable).start();
         
         Intent intent = new Intent(this,UpdateIntentService.class);
         if(isNewestBookType){
@@ -60,6 +60,7 @@ public class NewBookActivity extends DashboardActivity
                 new Thread(fetchCursorRunnable).start();
             }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK_COMPLETE)){
             	Log.d(TAG,"=== ACTION_UPDATE_TOP_BOOK_COMPLETE received! ===");
+            	new Thread(fetchCursorRunnable).start();
             }
         }
     };
@@ -67,6 +68,9 @@ public class NewBookActivity extends DashboardActivity
     final Runnable fetchCursorRunnable = new Runnable(){
     	public void run(){
     		DataBaseHandler dbHandler = new DataBaseHandler(NewBookActivity.this);
+            if(mBookCursor != null){
+                mBookCursor.close();
+            }
     		if(isNewestBookType){
                 mBookCursor = dbHandler.queryNewestBook();
                 mHandler.sendEmptyMessage(1);
@@ -90,6 +94,7 @@ public class NewBookActivity extends DashboardActivity
                           R.layout.bookitem, mBookCursor,
                           from, toViews);
                     listview.setAdapter(mAdapter);
+                    
                     break;
 //                case 2:
 //                	Log.d(TAG,"update top book list");

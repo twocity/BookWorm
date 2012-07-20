@@ -2,12 +2,11 @@ package com.twocity.bookworm;
 
 import com.twocity.bookworm.utils.AsyncImageLoader;
 import com.twocity.bookworm.utils.AsyncImageLoader.ImageCallback;
+import com.twocity.bookworm.utils.ImageDownloader;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +21,8 @@ import android.widget.TextView;
         private TextView titleTextView;
         private TextView authorTextView;
         private AsyncImageLoader imageLoader;
+        
+        private final ImageDownloader imageDownloader = new ImageDownloader();
 
         public BookCursorAdapter (Context context, int layout, Cursor c, String[] from, int[] to) {
             super(context, layout, c, from, to);
@@ -46,14 +47,15 @@ import android.widget.TextView;
             authorTextView = (TextView)ll.findViewById(R.id.book_author);
             
             String imagelink = cursor.getString(imageIndex);
+            imageDownloader.download(imagelink, (ImageView) bookImageView);
 
-            imageLoader.loadDrawable(imagelink, new ImageCallback() {
-                public void imageLoaded(Bitmap imageBitmap,String imageUrl) {
-                    if (imageBitmap != null) {
-                        bookImageView.setImageBitmap(imageBitmap);
-                    }
-                }
-            });
+//            imageLoader.loadDrawable(imagelink, new ImageCallback() {
+//                public void imageLoaded(Bitmap imageBitmap,String imageUrl) {
+//                    if (imageBitmap != null) {
+//                        bookImageView.setImageBitmap(imageBitmap);
+//                    }
+//                }
+//            });
             
             
             titleTextView.setText(cursor.getString(titleIndex));

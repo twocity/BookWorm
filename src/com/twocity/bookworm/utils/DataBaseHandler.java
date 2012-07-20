@@ -44,7 +44,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     
     @Override
     public void onCreate(SQLiteDatabase db){
-        Log.d(TAG,"=== create table: "+NEWEST_BOOK_TABLENAME + "===");
+        Log.d(TAG,"=== DB onCreate ===");
         db.execSQL(CREATE_NEWEST_BOOK_DB);
         db.execSQL(CREATE_TOP_BOOK_DB);
     }
@@ -85,31 +85,37 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         
         Log.d(TAG,"insert book :"+book.getBookTitle());
 
-        db.delete(NEWEST_BOOK_TABLENAME, _ID + " = ?", new String[]{ String.valueOf(book.getBookID()) });
-        db.insert(NEWEST_BOOK_TABLENAME,null,values);
+        db.delete(TOP_BOOK_TABLENAME, _ID + " = ?", new String[]{ String.valueOf(book.getBookID()) });
+        db.insert(TOP_BOOK_TABLENAME,null,values);
         db.close();
     }
     
     public Cursor queryNewestBook(){
         Log.d(TAG,"queryNewestBook()");
-        SQLiteDatabase db = this.getReadableDatabase();
-        //String selection[] ={TITLE};
-        Cursor c = db.query(NEWEST_BOOK_TABLENAME,null,null , null, null, null, null);
-        c.moveToFirst();
-        return c;
+        try{
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.query(NEWEST_BOOK_TABLENAME,null,null , null, null, null, null);
+            c.moveToFirst();
+            return c;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
     
     public Cursor queryTopBook(){
         Log.d(TAG,"queryTopBook()");
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.query(TOP_BOOK_TABLENAME,null,null , null, null, null, null);
-        c.moveToFirst();
-        return c;
+        try{
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor c = db.query(TOP_BOOK_TABLENAME,null,null , null, null, null, null);
+            c.moveToFirst();
+            return c;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
     
-    
-    public void updateNewestBook(ContentValues cv){
-        //SQLiteDatabase db = this.getWritableDatabase();
-        
-    }
 }

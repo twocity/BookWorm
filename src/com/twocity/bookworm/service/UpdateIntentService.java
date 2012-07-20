@@ -18,8 +18,8 @@ import java.io.IOException;
 public class UpdateIntentService extends IntentService{
     private static final String TAG = "UpdateIntentService";
     private static final String URL_NEWEST_BOOK = "http://book.douban.com/latest";
-    private static final String URL_TOP_BOOK_1 = "";
-    private static final String URL_TOP_BOOK_2 = "";
+    private static final String URL_TOP_BOOK_1 = "http://book.douban.com/chart?subcat=F";
+    private static final String URL_TOP_BOOK_2 = "http://book.douban.com/chart?subcat=I";
     private int top_book_index = 0;
 
     public UpdateIntentService(){
@@ -33,6 +33,7 @@ public class UpdateIntentService extends IntentService{
             Log.d(TAG,"=== start to update newest book info ===");
             updateNewestBook();
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK)){
+            Log.d(TAG,"=== start to update top20 book info ===");
             updateTopBook();
         }
     }
@@ -69,10 +70,11 @@ public class UpdateIntentService extends IntentService{
                     dbHandler.insertNewestBook(book);
                     i++;
                 }
-                Intent intent = new Intent();
-                intent.setAction(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK_COMPLETE);
-                sendBroadcast(intent);
             }
+            Intent intent = new Intent();
+            intent.setAction(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK_COMPLETE);
+            sendBroadcast(intent);
+            
         } catch(IOException e){
             e.printStackTrace();
         }
