@@ -5,15 +5,18 @@
     android:layout_height="fill_parent"
     >
     <LinearLayout style="@style/TitleBar">
-    	<ImageView style="@style/TitleBarLogo"
+    	<ImageButton style="@style/TitleBarAction"
     		android:contentDescription="@string/description_logo"
-    		android:src="@drawable/title_logo" />
+    		android:src="@drawable/title_home" 
+    		android:onClick="onClickHome" />
     	<ImageView style="@style/TitleBarSeparator" 
     	    android:contentDescription="@string/description_"/>
-    	<TextView style="@style/TitleBarText" />
+    	<TextView style="@style/TitleBarText" 
+    	    android:id="@+id/activity_title"/>
     	<ImageButton style="@style/TitleBarAction"
     		android:contentDescription="@string/description_about"
     		android:src="@drawable/title_about"
+    		android:visibility="gone"
     		android:onClick="onClickAbout" />
     	<ImageButton style="@style/TitleBarAction"
     		android:contentDescription="@string/description_search"
@@ -28,7 +31,10 @@
 	    <com.twocity.bookworm.widget.PullToRefreshListView
 		   android:id="@+id/newest_book_list"
 		   android:layout_height="match_parent"
-		   android:layout_width="wrap_content" />
+		   android:layout_width="wrap_content" 
+		   android:divider="@drawable/list_divider_line"
+		   android:listSelector="@drawable/listview_selected"
+		   android:dividerHeight="2.5dp"/>
 	
 	</LinearLayout>
 

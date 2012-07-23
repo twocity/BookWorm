@@ -16,7 +16,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 
@@ -31,20 +32,25 @@ public class NewBookActivity extends DashboardActivity
     private PullToRefreshListView listview;
     private boolean isNewestBookType = true;
     private Intent updateIntent;
+    TextView activityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_book);
         
+        activityTitle = (TextView)findViewById(R.id.activity_title);
+        
         isNewestBookType = this.getIntent().getBooleanExtra(PreferenceUtils.BOOK_TYPE, true);
         new Thread(fetchCursorRunnable).start();
         
         updateIntent = new Intent(this,UpdateIntentService.class);
         if(isNewestBookType){
+            activityTitle.setText(R.string.new_book_title);
             updateIntent.setAction(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK);
             
         }else{
+            activityTitle.setText(R.string.top_ten_title);
             updateIntent.setAction(PreferenceUtils.ACTION_UPDATE_TOP_BOOK);
         }
         //this.startService(intent);
@@ -56,7 +62,6 @@ public class NewBookActivity extends DashboardActivity
                 NewBookActivity.this.startService(updateIntent);
             }
         });
-        
     }
     
     private BroadcastReceiver broadreceiver = new BroadcastReceiver() {
@@ -66,9 +71,14 @@ public class NewBookActivity extends DashboardActivity
             if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK_COMPLETE)){
                 //Log.d(TAG,"=== newest book broadcast recerved ===");
                 new Thread(fetchCursorRunnable).start();
+                listview.onRefreshComplete();
             }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK_COMPLETE)){
             	//Log.d(TAG,"=== ACTION_UPDATE_TOP_BOOK_COMPLETE received! ===");
             	new Thread(fetchCursorRunnable).start();
+            	listview.onRefreshComplete();
+            }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_FAILED)){
+                listview.onRefreshComplete();
+                Toast.makeText(NewBookActivity.this,R.string.update_book_failed,Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -121,6 +131,7 @@ public class NewBookActivity extends DashboardActivity
          IntentFilter filter = new IntentFilter();
          filter.addAction(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK_COMPLETE);
          filter.addAction(PreferenceUtils.ACTION_UPDATE_TOP_BOOK_COMPLETE);
+         filter.addAction(PreferenceUtils.ACTION_UPDATE_FAILED);
          registerReceiver(broadreceiver,filter);
     }
     @Override
