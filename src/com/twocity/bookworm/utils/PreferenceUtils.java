@@ -11,6 +11,9 @@ public final class PreferenceUtils{
     	"bookworm.action.update.top.book.complete";
     public static final String ACTION_UPDATE_FAILED = 
         "bookworm.action.update.failed";
+    public static final String ACTION_SEARCH_BOOK = 
+        "bookworm.action.search.book";
+    public static final String SEARCH_ARG = "search_book_arg";
     
     public static final String BOOK_TYPE = "show_book_type";
 }

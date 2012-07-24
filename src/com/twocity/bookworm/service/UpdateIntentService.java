@@ -42,6 +42,10 @@ public class UpdateIntentService extends IntentService{
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK)){
             //Log.d(TAG,"=== start to update top20 book info ===");
             updateTopBook();
+        }else if(intent.getAction().equals(PreferenceUtils.ACTION_SEARCH_BOOK)){
+            String search_book_url = intent.getStringExtra(PreferenceUtils.SEARCH_ARG);
+            Log.d(TAG,search_book_url);
+            SearchBook(search_book_url);
         }
     }
     
@@ -131,6 +135,10 @@ public class UpdateIntentService extends IntentService{
         }
     }
     
+    private void SearchBook(String url){
+        String xml2parse = getHtml(url);
+    }
+    
     private String getHtml(String url){
         HttpClient httpClient = CustomHttpClient.getHttpClient();
         try {
@@ -143,7 +151,7 @@ public class UpdateIntentService extends IntentService{
           
           return result;
           
-        } catch (IOException e) {
+        } catch (Exception e) {
           e.printStackTrace();
           return null;
         }
@@ -154,6 +162,5 @@ public class UpdateIntentService extends IntentService{
             //Log.d(TAG,book.toString());
     		handler.insertTopBook(book);
     	}
-    	
     }
 }
