@@ -43,8 +43,12 @@
     
     <string name="update_book_failed">获取信息失败，请稍后再试</string>
 	
-	<string name="pull_to_refresh_pull_label">下拉刷新...</string>
-    <string name="pull_to_refresh_release_label">松开以刷新...</string>
-    <string name="pull_to_refresh_refreshing_label">正在加载...</string>
-    <string name="pull_to_refresh_tap_label">点击加载信息...</string>
+	<string name="pull_to_refresh_pull_label">下拉刷新&#8230;</string>
+    <string name="pull_to_refresh_release_label">松开以刷新&#8230;</string>
+    <string name="pull_to_refresh_refreshing_label">正在加载&#8230;</string>
+    <string name="pull_to_refresh_tap_label">点击加载信息&#8230;</string>
+    <string name="about_app">BookWorm提供的信息部分取自Douban.com</string>
+    <string name="source_code_info">此App为开源程序:</string>
+    <string name="source_code_address">https://github.com/twocity/BookWorm</string>
+    <string name="author_info">dvy.zhang@gmail.com</string>
 </resources>

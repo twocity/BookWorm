@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme is the default theme. -->
     <style name="Theme" parent="android:Theme"></style>
 
@@ -108,8 +108,9 @@
     </style>
 
     <style name="TextBody">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:lineSpacingMultiplier">1.1</item>
+        <item name="android:gravity">left</item>
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
         <style name="BookTitle" parent="@style/TextBody">
