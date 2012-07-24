@@ -1,9 +1,16 @@
 package com.twocity.bookworm.service;
 
 import com.twocity.bookworm.utils.Books;
+import com.twocity.bookworm.utils.CustomHttpClient;
 import com.twocity.bookworm.utils.DataBaseHandler;
 import com.twocity.bookworm.utils.PreferenceUtils;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,6 +42,10 @@ public class UpdateIntentService extends IntentService{
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK)){
             //Log.d(TAG,"=== start to update top20 book info ===");
             updateTopBook();
+        }else if(intent.getAction().equals(PreferenceUtils.ACTION_SEARCH_BOOK)){
+            String search_book_url = intent.getStringExtra(PreferenceUtils.SEARCH_ARG);
+            Log.d(TAG,search_book_url);
+            SearchBook(search_book_url);
         }
     }
     
@@ -75,8 +86,11 @@ public class UpdateIntentService extends IntentService{
             intent.setAction(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK_COMPLETE);
             sendBroadcast(intent);
             
-        } catch(IOException e){
+        } catch(Exception e){
             e.printStackTrace();
+            Intent intent = new Intent();
+            intent.setAction(PreferenceUtils.ACTION_UPDATE_FAILED);
+            sendBroadcast(intent);
         }
     }
     
@@ -88,15 +102,18 @@ public class UpdateIntentService extends IntentService{
             intent.setAction(PreferenceUtils.ACTION_UPDATE_TOP_BOOK_COMPLETE);
             sendBroadcast(intent);
             
-        } catch(IOException e){
+        } catch(Exception e){
             e.printStackTrace();
+            Intent intent = new Intent();
+            intent.setAction(PreferenceUtils.ACTION_UPDATE_FAILED);
+            sendBroadcast(intent);
         }
     }
 
-    private void ParseTopBookHtml(String... urls) throws IOException{
+    private void ParseTopBookHtml(String... urls) throws Exception{
         DataBaseHandler dbHandler = new DataBaseHandler(this);
         for(String url:urls){
-            Document doc = Jsoup.connect(url).get();
+            Document doc = Jsoup.parse(getHtml(url));//.connect(url).timeout(5000).get();
             Element article = doc.select("ul.chart-dashed-list").first();
             Elements booklist = article.select("li");
             
@@ -118,11 +135,32 @@ public class UpdateIntentService extends IntentService{
         }
     }
     
+    private void SearchBook(String url){
+        String xml2parse = getHtml(url);
+    }
+    
+    private String getHtml(String url){
+        HttpClient httpClient = CustomHttpClient.getHttpClient();
+        try {
+          
+          HttpGet request = new HttpGet(url);
+          HttpParams params = new BasicHttpParams();
+          HttpConnectionParams.setSoTimeout(params,5000);   // 5s
+          request.setParams(params);
+          String result = httpClient.execute(request,new BasicResponseHandler());
+          
+          return result;
+          
+        } catch (Exception e) {
+          e.printStackTrace();
+          return null;
+        }
+    }
+    
     private void insert2DB(DataBaseHandler handler,Books book){
     	if(!book.isEmpty()){
             //Log.d(TAG,book.toString());
     		handler.insertTopBook(book);
     	}
-    	
     }
 }

@@ -40,9 +40,11 @@
     <string name="title_feature4">Feature 4</string>
     <string name="title_feature5">Feature 5</string>
     <string name="title_feature6">Feature 6</string>
+    
+    <string name="update_book_failed">获取信息失败，请稍后再试</string>
 	
-	<string name="pull_to_refresh_pull_label">Pull to refresh...</string>
-    <string name="pull_to_refresh_release_label">Release to refresh...</string>
-    <string name="pull_to_refresh_refreshing_label">Loading...</string>
-    <string name="pull_to_refresh_tap_label">Tap to refresh...</string>
+	<string name="pull_to_refresh_pull_label">下拉刷新...</string>
+    <string name="pull_to_refresh_release_label">松开以刷新...</string>
+    <string name="pull_to_refresh_refreshing_label">正在加载...</string>
+    <string name="pull_to_refresh_tap_label">点击加载信息...</string>
 </resources>

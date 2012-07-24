@@ -112,5 +112,8 @@
         <item name="android:lineSpacingMultiplier">1.1</item>
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
+        <style name="BookTitle" parent="@style/TextBody">
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>
