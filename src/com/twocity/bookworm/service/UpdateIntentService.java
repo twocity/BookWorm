@@ -37,10 +37,8 @@ public class UpdateIntentService extends IntentService{
     protected void onHandleIntent(Intent intent){
         Log.d(TAG,"=== receive intent: "+intent.getAction());
         if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_NEWEST_BOOK)){
-            //Log.d(TAG,"=== start to update newest book info ===");
             updateNewestBook();
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK)){
-            //Log.d(TAG,"=== start to update top20 book info ===");
             updateTopBook();
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_SEARCH_BOOK)){
             String search_book_url = intent.getStringExtra(PreferenceUtils.SEARCH_ARG);
@@ -136,7 +134,8 @@ public class UpdateIntentService extends IntentService{
     }
     
     private void SearchBook(String url){
-        String xml2parse = getHtml(url);
+        String xml2parse = getHtml(url.toString());
+        Log.d(TAG,xml2parse==null?"empty":xml2parse);
     }
     
     private String getHtml(String url){
