@@ -1,10 +1,5 @@
 package com.twocity.bookworm.service;
 
-import com.twocity.bookworm.utils.Books;
-import com.twocity.bookworm.utils.CustomHttpClient;
-import com.twocity.bookworm.utils.DataBaseHandler;
-import com.twocity.bookworm.utils.PreferenceUtils;
-
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -20,7 +15,11 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import java.io.IOException;
+import com.twocity.bookworm.utils.BookXmlParser;
+import com.twocity.bookworm.utils.Books;
+import com.twocity.bookworm.utils.CustomHttpClient;
+import com.twocity.bookworm.utils.DataBaseHandler;
+import com.twocity.bookworm.utils.PreferenceUtils;
 
 public class UpdateIntentService extends IntentService{
     private static final String TAG = "UpdateIntentService";
@@ -41,9 +40,9 @@ public class UpdateIntentService extends IntentService{
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK)){
             updateTopBook();
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_SEARCH_BOOK)){
-            String search_book_url = intent.getStringExtra(PreferenceUtils.SEARCH_ARG);
-            Log.d(TAG,search_book_url);
-            SearchBook(search_book_url);
+            String search_book_args = intent.getStringExtra(PreferenceUtils.SEARCH_ARG);
+            Log.d(TAG,search_book_args);
+            SearchBook(search_book_args);
         }
     }
     
@@ -133,12 +132,12 @@ public class UpdateIntentService extends IntentService{
         }
     }
     
-    private void SearchBook(String url){
-        String xml2parse = getHtml(url.toString());
-        Log.d(TAG,xml2parse==null?"empty":xml2parse);
+    private void SearchBook(String arg){
+    	BookXmlParser parser = new BookXmlParser(arg);
     }
     
     private String getHtml(String url){
+    	Log.d(TAG,"url: "+url);
         HttpClient httpClient = CustomHttpClient.getHttpClient();
         try {
           

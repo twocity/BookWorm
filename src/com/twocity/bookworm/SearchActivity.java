@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 public class SearchActivity extends DashboardActivity implements OnClickListener {
     private final static String TAG = "BookWorm";
-    private final static String search_url = "http://api.douban.com/book/subjects?q=%s";
     
     
     private EditText mSearchEdit = null;
@@ -51,7 +50,7 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
             case R.id.search_button:
                 Intent intent = new Intent(SearchActivity.this,UpdateIntentService.class);
                 intent.setAction(PreferenceUtils.ACTION_SEARCH_BOOK);
-                intent.putExtra(PreferenceUtils.SEARCH_ARG, String.format(search_url, mSearchEdit.getText().toString()));
+                intent.putExtra(PreferenceUtils.SEARCH_ARG, mSearchEdit.getText().toString().trim());
                 SearchActivity.this.startService(intent);
                 break;
             default:
