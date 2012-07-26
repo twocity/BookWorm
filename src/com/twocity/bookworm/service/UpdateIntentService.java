@@ -1,5 +1,11 @@
 package com.twocity.bookworm.service;
 
+import com.twocity.bookworm.utils.BookJsonParser;
+import com.twocity.bookworm.utils.Books;
+import com.twocity.bookworm.utils.CustomHttpClient;
+import com.twocity.bookworm.utils.DataBaseHandler;
+import com.twocity.bookworm.utils.PreferenceUtils;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -14,12 +20,6 @@ import org.jsoup.select.Elements;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
-
-import com.twocity.bookworm.utils.BookXmlParser;
-import com.twocity.bookworm.utils.Books;
-import com.twocity.bookworm.utils.CustomHttpClient;
-import com.twocity.bookworm.utils.DataBaseHandler;
-import com.twocity.bookworm.utils.PreferenceUtils;
 
 public class UpdateIntentService extends IntentService{
     private static final String TAG = "UpdateIntentService";
@@ -133,7 +133,11 @@ public class UpdateIntentService extends IntentService{
     }
     
     private void SearchBook(String arg){
-    	BookXmlParser parser = new BookXmlParser(arg);
+        String jsonString = BookJsonParser.getStringfromHtml(arg, "1");
+        Intent intent = new Intent();
+        intent.setAction(PreferenceUtils.ACTION_SEARCH_BOOK_COMPLETE);
+        intent.putExtra(PreferenceUtils.SEARCH_BOOK_JSON, jsonString);
+        sendBroadcast(intent);
     }
     
     private String getHtml(String url){

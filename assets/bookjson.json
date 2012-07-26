@@ -1,0 +1,79 @@
+{"opensearch:totalResults":{"$t":"3"},
+	"opensearch:startIndex":{"$t":"1"},
+	"opensearch:itemsPerPage":{"$t":"10"},
+	"entry":[
+			{
+				"category":{
+						"@scheme":"http:\/\/www.douban.com\/2007#kind",
+						"@term":"http:\/\/www.douban.com\/2007#book"
+					},
+				"author":[
+					{"name":{"$t":"[美] 安东尼·刘易斯"}}],
+				"title":{"$t":"批评官员的尺度"},
+				"link":[
+						{
+							"@rel":"self",
+							"@href":"http:\/\/api.douban.com\/book\/subject\/6401128"
+						},
+						{
+							"@rel":"alternate",
+							"@href":"http:\/\/book.douban.com\/subject\/6401128\/"
+						},
+						{
+							"@rel":"image",
+							"@href":"http:\/\/img5.douban.com\/spic\/s6643899.jpg"
+						},
+						{
+							"@rel":"mobile",
+							"@href":"http:\/\/m.douban.com\/book\/subject\/6401128\/"
+						}
+					    ],
+				"db:attribute":[{"$t":"7301188730","@name":"isbn10"},
+								{"$t":"9787301188736","@name":"isbn13"},{"$t":"何帆","@name":"translator"},
+								{"$t":"[美] 安东尼·刘易斯","@name":"author"},{"$t":"32.00元","@name":"price"},
+								{"$t":"北京大学出版社","@name":"publisher"},
+								{"$t":"2011-7","@name":"pubdate"}],
+								
+				"id":{
+						"$t":"http:\/\/api.douban.com\/book\/subject\/6401128"
+					},
+				"gd:rating":{
+						"@min":0,"@numRaters":2950,"@average":"8.9","@max":10
+				}
+			},
+
+
+			{"category":{"@scheme":"http:\/\/www.douban.com\/2007#kind",
+				"@term":"http:\/\/www.douban.com\/2007#book"},
+				"author":[{"name":{"$t":"修铁"}}],
+				"title":{"$t":"赞美的分寸批评的尺度"},
+				"link":[{"@rel":"self","@href":"http:\/\/api.douban.com\/book\/subject\/2970738"},
+						{"@rel":"alternate","@href":"http:\/\/book.douban.com\/subject\/2970738\/"},
+						{"@rel":"image","@href":"http:\/\/img3.douban.com\/spic\/s5865735.jpg"},
+						{"@rel":"mobile","@href":"http:\/\/m.douban.com\/book\/subject\/2970738\/"}],
+				"db:attribute":[{"$t":"7801796527","@name":"isbn10"},
+								{"$t":"9787801796523","@name":"isbn13"},
+								{"$t":"修铁","@name":"author"},
+								{"$t":"29.80元","@name":"price"},
+								{"$t":"中国致公出版社","@name":"publisher"},
+								{"$t":"2008-3","@name":"pubdate"}],
+				"id":{"$t":"http:\/\/api.douban.com\/book\/subject\/2970738"},
+				"gd:rating":{"@min":0,"@numRaters":0,"@average":0,"@max":10}},
+
+
+			{"category":{"@scheme":"http:\/\/www.douban.com\/2007#kind",
+				"@term":"http:\/\/www.douban.com\/2007#book"},
+				"author":[{"name":{"$t":"王刚"}}],
+				"title":{"$t":"把握好赞美的尺度与批评的分寸"},
+				"link":[{"@rel":"self","@href":"http:\/\/api.douban.com\/book\/subject\/1105104"},
+						{"@rel":"alternate","@href":"http:\/\/book.douban.com\/subject\/1105104\/"},
+						{"@rel":"image","@href":"http:\/\/img3.douban.com\/spic\/s1307648.jpg"},
+						{"@rel":"mobile","@href":"http:\/\/m.douban.com\/book\/subject\/1105104\/"}],
+				"db:attribute":[{"$t":"7502822240","@name":"isbn10"},
+								{"$t":"9787502822248","@name":"isbn13"},
+								{"$t":"王刚","@name":"author"},{"$t":"22.80","@name":"price"},
+								{"$t":"地震出版社","@name":"publisher"},
+								{"$t":"2003-2-1","@name":"pubdate"}],
+				"id":{"$t":"http:\/\/api.douban.com\/book\/subject\/1105104"},
+				"gd:rating":{"@min":0,"@numRaters":0,"@average":0,"@max":10}}],
+	"title":{"$t":"搜索 %批评官员的尺度 的结果"}}

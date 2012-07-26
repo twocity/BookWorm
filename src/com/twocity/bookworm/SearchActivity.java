@@ -1,9 +1,13 @@
 package com.twocity.bookworm;
 
 import com.twocity.bookworm.service.UpdateIntentService;
+import com.twocity.bookworm.utils.BookJsonParser;
 import com.twocity.bookworm.utils.PreferenceUtils;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,6 +47,16 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
         mSearchButton.setOnClickListener(this);
     }
     
+    private BroadcastReceiver broadreceiver = new BroadcastReceiver() {
+        
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(PreferenceUtils.ACTION_SEARCH_BOOK_COMPLETE)){
+                String json = intent.getStringExtra(PreferenceUtils.SEARCH_BOOK_JSON);
+                BookJsonParser.Parser(json);
+            }
+        }
+    };
     
     @Override
     public void onClick(View v) {
@@ -56,5 +70,18 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
             default:
                 break;
         }
+    }
+    
+    @Override
+    protected void onStart(){
+         super.onStart();
+         IntentFilter filter = new IntentFilter();
+         filter.addAction(PreferenceUtils.ACTION_SEARCH_BOOK_COMPLETE);
+         registerReceiver(broadreceiver,filter);
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        unregisterReceiver(broadreceiver);
     }
 }

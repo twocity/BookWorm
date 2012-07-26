@@ -21,24 +21,50 @@ public class Books{
         this.book_image_link = image_link;
     }
     
+    public Books(String title,String author,String link,String image_link){
+        this.book_title = title;
+        this.book_author = author;
+        this.book_link = link;
+        this.book_image_link = image_link;
+    }
+    
     public int getBookID(){
         return this._id;
+    }
+    public void setBookTitle(String title){
+        this.book_title = title;
     }
     
     public String getBookTitle(){
         return this.book_title;
     }
     
+    public void setBookAuthor(String author){
+        this.book_author = author;
+    }
+    
     public String getBookAuthor(){
         return this.book_author;
+    }
+    
+    public void setBookSummary(String summary){
+        this.book_summary = summary;
     }
     
     public String getBookSummary(){
         return this.book_summary;
     }
     
+    public void setBookLink(String link){
+        this.book_link = link;
+    }
+    
     public String getBookLink(){
         return this.book_link;
+    }
+    
+    public void setBookImageLink(String link){
+        this.book_image_link = link;
     }
     
     public String getBookImgaeLink(){
