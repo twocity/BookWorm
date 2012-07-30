@@ -41,7 +41,9 @@
     <string name="title_feature5">Feature 5</string>
     <string name="title_feature6">Feature 6</string>
     
+    <string name="connection_wrong_msg">网络连接失败，请检查网络是否连接</string>
     <string name="update_book_failed">获取信息失败，请稍后再试</string>
+    <string name="search_title">搜索结果：</string>
 	
 	<string name="pull_to_refresh_pull_label">下拉刷新&#8230;</string>
     <string name="pull_to_refresh_release_label">松开以刷新&#8230;</string>

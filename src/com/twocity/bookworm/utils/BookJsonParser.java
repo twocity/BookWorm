@@ -104,6 +104,10 @@ public class BookJsonParser{
 	        }
 	    }catch(JSONException e){
 	        e.printStackTrace();
+	    }catch(NullPointerException e){
+	        e.printStackTrace();
+	    }catch(Exception e){
+	        e.printStackTrace();
 	    }
 	    return BookList;
 	}

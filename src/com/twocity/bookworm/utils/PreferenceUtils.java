@@ -20,4 +20,7 @@ public final class PreferenceUtils{
     public static final String BOOK_TYPE = "show_book_type";
     
     public static final String SEARCH_BOOK_JSON = "search_book_json_string";
+    
+    public static final String BOOK_DETAIL_LINK = "book_detail_link";
+    public static final String BOOK_DETAIL_TITLE = "book_detail_title";
 }

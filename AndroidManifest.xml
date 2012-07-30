@@ -26,6 +26,9 @@
 	  <activity android:name=".NewBookActivity"
 	      android:theme="@style/Theme.D1"
 	      android:label="@string/new_book_title" />
+	  <activity android:name=".BookDetail"
+	      android:theme="@style/Theme.D1"
+	      android:label="@string/new_book_title" />
 	  <service 
 	      android:name=".service.UpdateIntentService">
 	      

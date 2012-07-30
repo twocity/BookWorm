@@ -1,21 +1,56 @@
 package com.twocity.bookworm;
 
+import com.twocity.bookworm.utils.CustomHttpClient;
 import com.twocity.bookworm.utils.PreferenceUtils;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 public class BookWorm extends DashboardActivity {
+    private static final String TAG = "BookWorm";
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        boolean firstCheck = isConnected("http://www.douban.com");
+        boolean secondCheck = isConnected("http://www.baidu.com");
+        if(!firstCheck || !secondCheck){
+            Toast.makeText(this, R.string.connection_wrong_msg, Toast.LENGTH_LONG).show();
+        }
     }
     
     
-    
+    private boolean isConnected(String url){
+        try {
+                HttpClient httpClient = CustomHttpClient.getHttpClient();
+                HttpGet request = new HttpGet(url);
+                HttpParams params = new BasicHttpParams();
+                HttpConnectionParams.setSoTimeout(params, 10000);
+                request.setParams(params);
+                HttpResponse response = httpClient.execute(request);
+                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+                    return true;
+                }else{
+                    return false;
+                }
+            }catch (Exception e) {
+              Log.d(TAG,"=== check network wrong ===");
+              return false;
+            }
+    }
     
     public void doClick(View v){
         Intent intent;
