@@ -111,13 +111,11 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
     
     private void startSearch(int index,boolean loadmore){
         String nowSearchArgs = mSearchEdit.getText().toString().trim();
-        if(nowSearchArgs.equals(searchArgs) && !loadmore){
+        if(!loadmore){
             bookList.clear();
             mAdapter.notifyDataSetChanged();
-        }else{
-            searchArgs = nowSearchArgs;
         }
-
+        searchArgs = nowSearchArgs;
         Intent intent = new Intent(SearchActivity.this,UpdateIntentService.class);
         intent.setAction(PreferenceUtils.ACTION_SEARCH_BOOK);
         intent.putExtra(PreferenceUtils.SEARCH_ARG_Q, searchArgs);
