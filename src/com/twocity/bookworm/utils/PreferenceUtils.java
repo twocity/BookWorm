@@ -15,7 +15,8 @@ public final class PreferenceUtils{
         "bookworm.action.search.book";
     public static final String ACTION_SEARCH_BOOK_COMPLETE = 
         "bookworm.action.search.book.complete";
-    public static final String SEARCH_ARG = "search_book_arg";
+    public static final String SEARCH_ARG_Q = "search_book_arg_q";
+    public static final String SEARCH_ARG_START_INDEX = "search_book_arg_start_index";
     
     public static final String BOOK_TYPE = "show_book_type";
     

@@ -40,9 +40,11 @@ public class UpdateIntentService extends IntentService{
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_UPDATE_TOP_BOOK)){
             updateTopBook();
         }else if(intent.getAction().equals(PreferenceUtils.ACTION_SEARCH_BOOK)){
-            String search_book_args = intent.getStringExtra(PreferenceUtils.SEARCH_ARG);
-            Log.d(TAG,search_book_args);
-            SearchBook(search_book_args);
+            String search_book_args = intent.getStringExtra(PreferenceUtils.SEARCH_ARG_Q);
+            String start_index = intent.getStringExtra(PreferenceUtils.SEARCH_ARG_START_INDEX);
+            Log.d(TAG,"search_q: "+search_book_args);
+            Log.d(TAG,"search_start-index: "+start_index);
+            SearchBook(search_book_args,start_index);
         }
     }
     
@@ -132,8 +134,8 @@ public class UpdateIntentService extends IntentService{
         }
     }
     
-    private void SearchBook(String arg){
-        String jsonString = BookJsonParser.getStringfromHtml(arg, "1");
+    private void SearchBook(String args_q,String start_index){
+        String jsonString = BookJsonParser.getStringfromHtml(args_q, start_index);
         Intent intent = new Intent();
         intent.setAction(PreferenceUtils.ACTION_SEARCH_BOOK_COMPLETE);
         intent.putExtra(PreferenceUtils.SEARCH_BOOK_JSON, jsonString);

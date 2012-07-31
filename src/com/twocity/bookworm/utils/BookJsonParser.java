@@ -98,7 +98,7 @@ public class BookJsonParser{
 	                bookitem.setBookTitle(title);
 	            }
 
-	            Log.d(TAG,bookitem.toString());
+	            //Log.d(TAG,bookitem.toString());
 	            BookList.add(bookitem);
 
 	        }

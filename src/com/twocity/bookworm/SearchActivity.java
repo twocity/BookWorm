@@ -11,12 +11,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -29,10 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class SearchActivity extends DashboardActivity implements OnClickListener{
+public class SearchActivity extends DashboardActivity implements OnClickListener,OnScrollListener
+{
     private final static String TAG = "BookWorm";
     
     private ProgressBar mProgressBar = null;
@@ -41,6 +45,13 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
     private ArrayList<Books> bookList = null;
     private ListView searchList = null;
     private SearchBookAdapter mAdapter = null;
+    //private TextView mLoadMoreText = null;
+    
+    //search args
+    private boolean loadMore = false;
+    private String searchArgs = "";
+    private int start_index = 1;
+    private final static int INCRECEMENT = 15;
     
     protected void onCreate(Bundle savedInstanceSaved) {
         super.onCreate(savedInstanceSaved);
@@ -56,7 +67,8 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
             public boolean onKey(View v,int keyCode,KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_ENTER && 
                         event.getAction() == KeyEvent.ACTION_DOWN) {
-                    startSearch();
+                    start_index = 1;
+                    startSearch(start_index,false);
                     return true;
                 }
                 return false;
@@ -64,10 +76,20 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
         });
         mSearchButton = (ImageButton) findViewById(R.id.search_button);
         mSearchButton.setOnClickListener(this);
+        mProgressBar = (ProgressBar)findViewById(R.id.search_progressbar);
+
         
+        //set list view
         searchList = (ListView)findViewById(R.id.search_book_list);
         searchList.setOnItemClickListener(myClickListener);
-        mProgressBar = (ProgressBar)findViewById(R.id.search_progressbar);
+        mAdapter = new SearchBookAdapter(SearchActivity.this,bookList);
+        
+        //View footView = this.getLayoutInflater().inflate(R.layout.load_more_layout, null);
+        // foot tips
+        //mLoadMoreText = (TextView)footView.findViewById(R.id.load_more_textview);
+        //searchList.addFooterView(footView);
+        searchList.setAdapter(mAdapter);
+        searchList.setOnScrollListener(this);
     }
     
     private BroadcastReceiver broadreceiver = new BroadcastReceiver() {
@@ -76,11 +98,9 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(PreferenceUtils.ACTION_SEARCH_BOOK_COMPLETE)){
                 String json = intent.getStringExtra(PreferenceUtils.SEARCH_BOOK_JSON);
-                bookList = BookJsonParser.Parser(json);
-                if(bookList != null){
-                    mAdapter = new SearchBookAdapter(SearchActivity.this,bookList);
-                    searchList.setAdapter(mAdapter);
-                    mProgressBar.setVisibility(View.INVISIBLE);
+                ArrayList<Books> fetchlist = BookJsonParser.Parser(json);
+                if(fetchlist != null){
+                    updateList(fetchlist);
                 }else{
                     Toast.makeText(SearchActivity.this, R.string.update_book_failed, Toast.LENGTH_SHORT).show();
                 }
@@ -89,24 +109,60 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
         }
     };
     
-    private void startSearch(){
+    private void startSearch(int index,boolean loadmore){
+        String nowSearchArgs = mSearchEdit.getText().toString().trim();
+        if(nowSearchArgs.equals(searchArgs) && !loadmore){
+            bookList.clear();
+            mAdapter.notifyDataSetChanged();
+        }else{
+            searchArgs = nowSearchArgs;
+        }
+
         Intent intent = new Intent(SearchActivity.this,UpdateIntentService.class);
         intent.setAction(PreferenceUtils.ACTION_SEARCH_BOOK);
-        intent.putExtra(PreferenceUtils.SEARCH_ARG, mSearchEdit.getText().toString().trim());
+        intent.putExtra(PreferenceUtils.SEARCH_ARG_Q, searchArgs);
+        intent.putExtra(PreferenceUtils.SEARCH_ARG_START_INDEX,String.valueOf(index));
         SearchActivity.this.startService(intent);
+        
         mProgressBar.setVisibility(View.VISIBLE);
+    }
+    
+    private void updateList(ArrayList<Books> list){
+        for(Books item:list){
+            bookList.add(item);
+        }
+        mAdapter.notifyDataSetChanged();
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
     
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_button:
-                startSearch();
+                start_index = 1;
+                startSearch(start_index,false);
                 break;
             default:
                 break;
         }
     }
+    
+    @Override
+    public void onScroll(AbsListView view,int firstVisible, int visibleCount, int totalCount) {
+        loadMore = firstVisible + visibleCount >= totalCount;
+    }
+    
+    @Override
+    public void onScrollStateChanged(AbsListView v, int s){
+        if(s == OnScrollListener.SCROLL_STATE_IDLE && loadMore){
+            Log.d(TAG,"=== load more ===");
+            start_index += INCRECEMENT;
+            startSearch(start_index,true);
+            //mLoadMoreText.setText(getResources().getString(R.string.loading));
+        }
+    }
+
+
     
     @Override
     protected void onStart(){
@@ -127,10 +183,14 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
         public void onItemClick(AdapterView<?> a, View view, int position, long id){
             Intent i = new Intent(SearchActivity.this,BookDetail.class);
             Books book = (Books)searchList.getAdapter().getItem(position);
-            String url = book.getBookLink();
-            i.putExtra(PreferenceUtils.BOOK_DETAIL_LINK, url);
-            i.putExtra(PreferenceUtils.BOOK_DETAIL_TITLE, book.getBookTitle());
-            startActivity(i);
+            if(book != null){
+                String url = book.getBookLink();
+                i.putExtra(PreferenceUtils.BOOK_DETAIL_LINK, url);
+                i.putExtra(PreferenceUtils.BOOK_DETAIL_TITLE, book.getBookTitle());
+                startActivity(i);
+                Log.d(TAG,"=== SearchActivity to BookDetail ===");
+            }
+
         }
     };
     
@@ -157,6 +217,10 @@ public class SearchActivity extends DashboardActivity implements OnClickListener
         public long getItemId(int position){
             return position;
         }
+        
+//        public void addItem(Books item){
+//            mBookList.add(item);
+//        }
         
         public View getView(int position, View convertView, ViewGroup parent) {
 

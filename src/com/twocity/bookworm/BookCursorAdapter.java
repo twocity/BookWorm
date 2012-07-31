@@ -47,4 +47,5 @@ import android.widget.TextView;
             titleTextView.setText(cursor.getString(titleIndex));
             authorTextView.setText(cursor.getString(authorIndex));
         }
+        
     }

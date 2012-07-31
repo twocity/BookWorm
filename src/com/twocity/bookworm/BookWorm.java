@@ -13,25 +13,32 @@ import org.apache.http.params.HttpParams;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 public class BookWorm extends DashboardActivity {
     private static final String TAG = "BookWorm";
+    private Handler handler = new Handler();
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        boolean firstCheck = isConnected("http://www.douban.com");
-        boolean secondCheck = isConnected("http://www.baidu.com");
-        if(!firstCheck || !secondCheck){
-            Toast.makeText(this, R.string.connection_wrong_msg, Toast.LENGTH_LONG).show();
-        }
+        //handler.post(checkNetworkRunnable);
     }
     
+    final Runnable checkNetworkRunnable = new Runnable(){
+        public void run(){
+            boolean firstCheck = isConnected("http://www.douban.com");
+            boolean secondCheck = isConnected("http://www.baidu.com");
+            if(!firstCheck || !secondCheck){
+                Toast.makeText(BookWorm.this, R.string.connection_wrong_msg, Toast.LENGTH_LONG).show();
+            }
+        }
+    };
     
     private boolean isConnected(String url){
         try {

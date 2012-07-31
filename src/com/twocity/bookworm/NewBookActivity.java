@@ -16,14 +16,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 
 
 
-public class NewBookActivity extends DashboardActivity
-        /*implements LoaderManager.LoaderCallbacks<Cursor>*/{
+public class NewBookActivity extends DashboardActivity {
     
     private static final String TAG="BookWorm";
     
@@ -53,7 +55,6 @@ public class NewBookActivity extends DashboardActivity
             activityTitle.setText(R.string.top_ten_title);
             updateIntent.setAction(PreferenceUtils.ACTION_UPDATE_TOP_BOOK);
         }
-        //this.startService(intent);
 
         listview = (PullToRefreshListView)findViewById(R.id.newest_book_list);
         listview.setOnRefreshListener(new OnRefreshListener() {
@@ -62,6 +63,7 @@ public class NewBookActivity extends DashboardActivity
                 NewBookActivity.this.startService(updateIntent);
             }
         });
+        listview.setOnItemClickListener(myClickListener);
     }
     
     private BroadcastReceiver broadreceiver = new BroadcastReceiver() {
@@ -124,6 +126,21 @@ public class NewBookActivity extends DashboardActivity
         }
     };
     
+    final OnItemClickListener myClickListener = new OnItemClickListener()
+    {
+        @Override
+        public void onItemClick(AdapterView<?> a, View view, int position, long id){
+            Intent i = new Intent(NewBookActivity.this,BookDetail.class);
+            Cursor c = (Cursor)listview.getAdapter().getItem(position);
+            int titleIndex = c.getColumnIndex("title");
+            int linkIndex = c.getColumnIndex("link");
+            String title = c.getString(titleIndex);
+            String url = c.getString(linkIndex);
+            i.putExtra(PreferenceUtils.BOOK_DETAIL_LINK, url);
+            i.putExtra(PreferenceUtils.BOOK_DETAIL_TITLE, title);
+            startActivity(i);
+        }
+    };
     
     @Override
     protected void onStart(){

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -28,6 +29,8 @@ public class BookDetail extends DashboardActivity{
         
         String booklink = this.getIntent().getStringExtra(PreferenceUtils.BOOK_DETAIL_LINK);
         String booktitle = this.getIntent().getStringExtra(PreferenceUtils.BOOK_DETAIL_TITLE);
+        Log.d(TAG,"booklink: "+booklink);
+        Log.d(TAG,"booktitle: "+booktitle);
         
         mProgressBar = (ProgressBar)findViewById(R.id.bookdetail_progressbar);
         mProgressBar.setVisibility(View.VISIBLE);
