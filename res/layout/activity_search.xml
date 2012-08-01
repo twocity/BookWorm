@@ -9,14 +9,16 @@
     		android:contentDescription="@string/description_logo"
     		android:src="@drawable/title_home" 
     		android:onClick="onClickHome" />
-    	<ImageView style="@style/TitleBarSeparator" />
+    	<!--  <ImageView style="@style/TitleBarSeparator" /> -->
     	<EditText style="@style/TitleBarSearch" />
 
     	<ProgressBar
     	    android:id="@+id/search_progressbar"
-    	    android:layout_width="@dimen/title_height"
-    	    android:layout_height="fill_parent" 
-    	    android:visibility="gone"/>
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_gravity="center"
+       	    android:visibility="gone"
+    	    />
 
     	<ImageButton style="@style/TitleBarAction"
     		android:id="@+id/search_button"

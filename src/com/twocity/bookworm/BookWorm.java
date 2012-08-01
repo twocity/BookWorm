@@ -62,15 +62,21 @@ public class BookWorm extends DashboardActivity {
     public void doClick(View v){
         Intent intent;
         switch(v.getId()) {
-            case R.id.newBook:
+            case R.id.home_btn_newbook:
                 intent = new Intent(this,NewBookActivity.class);
                 intent.putExtra(PreferenceUtils.BOOK_TYPE, true);
                 this.startActivity(intent);
                 break;
-            case R.id.topBook:
+            case R.id.home_btn_topbook:
                 intent = new Intent(this,NewBookActivity.class);
                 intent.putExtra(PreferenceUtils.BOOK_TYPE, false);
                 this.startActivity(intent);
+                break;
+            case R.id.home_btn_comment:
+                Toast.makeText(this,R.string.comment_tip,Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.home_btn_search:
+                startActivity(new Intent(this,SearchActivity.class));
                 break;
         }
     }

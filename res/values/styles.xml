@@ -105,6 +105,7 @@
         <item name="android:textColor">@color/title_background</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
+        <item name="android:background">@drawable/edit_text_style</item>
     </style>
 
     <style name="TextBody">

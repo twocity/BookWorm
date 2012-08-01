@@ -23,12 +23,6 @@
     <string name="description_about">About</string>
     <string name="description_home">Home</string>
     <string name="description_search">Search</string>
-    <string name="description_feature1">Feature 1</string>
-    <string name="description_feature2">Feature 2</string>
-    <string name="description_feature3">Feature 3</string>
-    <string name="description_feature4">Feature 4</string>
-    <string name="description_feature5">Feature 5</string>
-    <string name="description_feature6">Feature 6</string>
     <string name="description_">wtf</string>
 
     <string name="title_about">About</string>
@@ -36,11 +30,10 @@
     <string name="title_search">Search</string>
     <string name="new_book_title">新书速递</string>
     <string name="top_ten_title">热书榜</string>
-    <string name="title_feature3">Feature 3</string>
-    <string name="title_feature4">Feature 4</string>
-    <string name="title_feature5">Feature 5</string>
-    <string name="title_feature6">Feature 6</string>
+    <string name="comment_title">热门书评</string>
+    <string name="home_search_title">搜索</string>
     
+    <string name="comment_tip">书评功能即将推出</string>
     <string name="loading">正在获取</string>
     <string name="loading_more">显示更多</string>
     <string name="connection_wrong_msg">网络连接失败，请检查网络是否连接</string>

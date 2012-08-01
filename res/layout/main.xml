@@ -16,19 +16,47 @@
     		android:src="@drawable/title_search"
     		android:onClick="onClickSearch" />
     </LinearLayout>    		
-    		
-<LinearLayout 
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <Button android:id="@+id/newBook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/new_book_title" 
-        android:onClick="doClick"/>
-    <Button android:id="@+id/topBook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/top_ten_title" 
-        android:onClick="doClick"/>
-</LinearLayout>
+	
+	<LinearLayout
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:padding="6dip">
+	    <LinearLayout
+	        android:orientation="horizontal"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1">
+	        <Button android:id="@+id/home_btn_newbook"
+	            style="@style/HomeButton"
+	            android:onClick="doClick"
+	            android:text="@string/new_book_title" 
+	            android:drawableTop="@drawable/widget_bg_"/>
+	        <Button android:id="@+id/home_btn_topbook"
+	            style="@style/HomeButton"
+	            android:onClick="doClick"
+	            android:text="@string/top_ten_title" 
+	            android:drawableTop="@drawable/widget_top"/>
+	    </LinearLayout>
+	
+	    <LinearLayout
+	        android:orientation="horizontal"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1">
+	        <Button android:id="@+id/home_btn_comment"
+	            style="@style/HomeButton"
+	            android:onClick="doClick"
+	            android:text="@string/comment_title"
+	            android:drawableTop="@drawable/widget_comment"/>
+	        <Button android:id="@+id/home_btn_search"
+	            style="@style/HomeButton"
+	            android:onClick="doClick"
+	            android:text="@string/home_search_title"
+	            android:drawableTop="@drawable/widget_search"/>
+	    </LinearLayout>
+	
+	</LinearLayout>
+	
 </LinearLayout>
