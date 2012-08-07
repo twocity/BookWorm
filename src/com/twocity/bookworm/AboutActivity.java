@@ -22,8 +22,6 @@ public class AboutActivity extends DashboardActivity {
                 	"<p>" + "BookWorm信息获取自douban.com "+ "</p>" +
                 	"<p>" + "源码地址:" + "</p>" +
                     "<a href=\"http://www.google.com\">https://github.com/twocity/BookWorm</a> " +
-                	"<p>" + "Author:" + "</p>" +
-                    "<a href=\"mailto:dvy.zhang@gmail.com\">dvy.zhang@gmail.com</a> " +
                  "</div>"));
         mAboutText.setMovementMethod(LinkMovementMethod.getInstance());
     }

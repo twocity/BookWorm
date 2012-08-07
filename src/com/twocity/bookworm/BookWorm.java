@@ -73,7 +73,10 @@ public class BookWorm extends DashboardActivity {
                 this.startActivity(intent);
                 break;
             case R.id.home_btn_comment:
-                Toast.makeText(this,R.string.comment_tip,Toast.LENGTH_SHORT).show();
+                intent = new Intent(this,BookCommentActivity.class);
+                this.startActivity(intent);
+                finish();
+                //Toast.makeText(this,R.string.comment_tip,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_btn_search:
                 startActivity(new Intent(this,SearchActivity.class));

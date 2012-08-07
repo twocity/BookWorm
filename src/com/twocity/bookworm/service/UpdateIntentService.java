@@ -26,6 +26,7 @@ public class UpdateIntentService extends IntentService{
     private static final String URL_NEWEST_BOOK = "http://book.douban.com/latest";
     private static final String URL_TOP_BOOK_1 = "http://book.douban.com/chart?subcat=F";
     private static final String URL_TOP_BOOK_2 = "http://book.douban.com/chart?subcat=I";
+    private static final String BEST_COMMENT_RSS = "http://book.douban.com/feed/review/book";
     private int top_book_index = 0;
 
     public UpdateIntentService(){
@@ -45,6 +46,8 @@ public class UpdateIntentService extends IntentService{
             Log.d(TAG,"search_q: "+search_book_args);
             Log.d(TAG,"search_start-index: "+start_index);
             SearchBook(search_book_args,start_index);
+        }else if(intent.getAction().equals(PreferenceUtils.ACTION_BEST_COMMENT)){
+            getBestComment();
         }
     }
     
@@ -139,6 +142,27 @@ public class UpdateIntentService extends IntentService{
         Intent intent = new Intent();
         intent.setAction(PreferenceUtils.ACTION_SEARCH_BOOK_COMPLETE);
         intent.putExtra(PreferenceUtils.SEARCH_BOOK_JSON, jsonString);
+        sendBroadcast(intent);
+    }
+    
+    private void getBestComment(){
+        String comments = null ;//= BookJsonParser.BookCommentStrings(BEST_COMMENT_RSS);
+        HttpClient httpClient = CustomHttpClient.getHttpClient();
+        try {
+          
+          HttpGet request = new HttpGet(BEST_COMMENT_RSS);
+          HttpParams params = new BasicHttpParams();
+          HttpConnectionParams.setSoTimeout(params,5000);   // 5s
+          request.setParams(params);
+          comments = httpClient.execute(request,new BasicResponseHandler());
+    
+          
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        Intent intent = new Intent();
+        intent.setAction(PreferenceUtils.ACTION_BEST_COMMENT_COMPLETE);
+        intent.putExtra(PreferenceUtils.BEST_COMMENT, comments);
         sendBroadcast(intent);
     }
     

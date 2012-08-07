@@ -9,9 +9,13 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Log;
+import android.util.Xml;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 
 
@@ -50,6 +54,9 @@ public class BookJsonParser{
           return null;
         }
 	}
+	
+	
+	
 	
 	
 	public static ArrayList<Books> Parser(String json){
@@ -110,6 +117,52 @@ public class BookJsonParser{
 	        e.printStackTrace();
 	    }
 	    return BookList;
+	}
+	
+	public static String BookCommentStrings(String url){
+	    String content = null;
+	    try{
+	        content = HttpApi.getContent(url);
+	    }catch(Exception e){
+	        e.printStackTrace();
+	    }
+	    return content;
+	}
+	
+	public static ArrayList<Books> BookCommentParser(String content){
+	    ArrayList<Books> booklist = new ArrayList<Books>();
+	    try{
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setInput(new StringReader(content));
+            
+            //
+            int eventType = parser.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+             if(eventType == XmlPullParser.START_DOCUMENT) {
+                 System.out.println("===== Start document ======");
+             } else if(eventType == XmlPullParser.START_TAG) {
+                 if(parser.getName().equals("item")){
+                     eventType = parser.next();
+                     if(parser.getName().equals("title")){
+                         Log.d(TAG,"title: "+parser.getText());
+                         //eventType = parser.next();
+                     }
+                 }
+             } else if(eventType == XmlPullParser.END_TAG) {
+                 //System.out.println("End tag "+parser.getName());
+             } else if(eventType == XmlPullParser.TEXT) {
+                 //System.out.println("Text "+parser.getText());
+             }
+             eventType = parser.next();
+            }
+            
+            
+	    }catch(XmlPullParserException e){
+	        
+	    }catch(Exception e){
+	        
+	    }
+	    return booklist;
 	}
 	
 	static final public class RequestArgs{
