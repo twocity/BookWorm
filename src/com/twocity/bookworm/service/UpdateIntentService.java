@@ -1,9 +1,12 @@
 package com.twocity.bookworm.service;
 
+import com.twocity.bookworm.utils.BestBookCommentXmlParser;
+import com.twocity.bookworm.utils.BestBookCommentXmlParser.BookComment;
 import com.twocity.bookworm.utils.BookJsonParser;
 import com.twocity.bookworm.utils.Books;
 import com.twocity.bookworm.utils.CustomHttpClient;
 import com.twocity.bookworm.utils.DataBaseHandler;
+import com.twocity.bookworm.utils.HttpApi;
 import com.twocity.bookworm.utils.PreferenceUtils;
 
 import org.apache.http.client.HttpClient;
@@ -20,6 +23,9 @@ import org.jsoup.select.Elements;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+
+import java.io.InputStream;
+import java.util.List;
 
 public class UpdateIntentService extends IntentService{
     private static final String TAG = "UpdateIntentService";
@@ -146,24 +152,20 @@ public class UpdateIntentService extends IntentService{
     }
     
     private void getBestComment(){
-        String comments = null ;//= BookJsonParser.BookCommentStrings(BEST_COMMENT_RSS);
-        HttpClient httpClient = CustomHttpClient.getHttpClient();
-        try {
-          
-          HttpGet request = new HttpGet(BEST_COMMENT_RSS);
-          HttpParams params = new BasicHttpParams();
-          HttpConnectionParams.setSoTimeout(params,5000);   // 5s
-          request.setParams(params);
-          comments = httpClient.execute(request,new BasicResponseHandler());
-    
-          
-        } catch (Exception e) {
-          e.printStackTrace();
+        try{
+            InputStream inputstream = HttpApi.getStream("http://book.douban.com/feed/review/book");
+            if(inputstream != null){
+                Log.d(TAG,"=== start to parser ===");
+                BestBookCommentXmlParser xmlparser = new BestBookCommentXmlParser();
+                List<BookComment> list = xmlparser.parse(inputstream);
+                for(BookComment item:list){
+                    Log.d(TAG,item.toString());
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        Intent intent = new Intent();
-        intent.setAction(PreferenceUtils.ACTION_BEST_COMMENT_COMPLETE);
-        intent.putExtra(PreferenceUtils.BEST_COMMENT, comments);
-        sendBroadcast(intent);
+        
     }
     
     private String getHtml(String url){

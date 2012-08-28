@@ -78,8 +78,7 @@ public class BookCommentActivity extends DashboardActivity {
         }
     };
     
-    final OnItemClickListener myClickListener = new OnItemClickListener()
-    {
+    final OnItemClickListener myClickListener = new OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> a, View view, int position, long id){
             Intent i = new Intent(BookCommentActivity.this,BookDetail.class);
