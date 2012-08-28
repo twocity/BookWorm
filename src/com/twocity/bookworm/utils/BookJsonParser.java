@@ -122,7 +122,7 @@ public class BookJsonParser{
 	public static String BookCommentStrings(String url){
 	    String content = null;
 	    try{
-	        content = HttpApi.getContent(url);
+	        content = HttpApi.getStrings(url);
 	    }catch(Exception e){
 	        e.printStackTrace();
 	    }
